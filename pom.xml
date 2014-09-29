@@ -9,11 +9,20 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${mvn.spring.version}</version>
-        </dependency>
-
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${mvn.spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${mvn.spring.version}</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-tx</artifactId>
+			<version>${mvn.spring.version}</version>
+		</dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -48,11 +57,22 @@
             <version>0.3.7</version>
             <scope>test</scope>
         </dependency>
-
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>javax.xml.bind</groupId>
+		  <artifactId>jaxb-api</artifactId>
+		  <version>2.2</version>
+		</dependency>
     </dependencies>
 
     <properties>
-        <mvn.spring.version>3.1.0.RELEASE</mvn.spring.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mvn.spring.version>3.2.2.RELEASE</mvn.spring.version>
         <mvn.project.build.sourceEncoding>UTF-8</mvn.project.build.sourceEncoding>
         <mvn.var1>Hello</mvn.var1>
         <mvn.main.class>com.cginfo.test.simplespring.Main</mvn.main.class>
@@ -60,6 +80,12 @@
         <!-- log4j -->
         <mvn.log4j.rootCategory>WARN</mvn.log4j.rootCategory>
         <mvn.log4j.category.org.springframework.beans.factory>WARN</mvn.log4j.category.org.springframework.beans.factory>
+        
+        <!-- jaxb 
+        <maven.jaxb.src.dir>src/main/xjb</maven.jaxb.src.dir>
+        <maven.jaxb.build.dir>src/main/java</maven.jaxb.build.dir>
+        <maven.jaxb.package>com.cginfo.test.simplespring.jaxbclass</maven.jaxb.package>
+        -->
     </properties>
 
     <build>
@@ -86,7 +112,7 @@
             </plugins>
 
         </pluginManagement>
-
+	
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -96,6 +122,37 @@
                     <source>1.6</source>
                     <target>1.6</target>
                     <encoding>${mvn.project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+					<schemaDirectory>src/main/resources/schema</schemaDirectory>
+                    <packageName>com.cginfo.test.simplespring.jaxbclass</packageName> <!-- The name of your generated source package -->
+
+					<clearOutputDir>true</clearOutputDir>
+					<outputDirectory>target/generated-sources/jaxb</outputDirectory>
+					<nv>true</nv>
+					<bindingFiles>jaxb_bindings.xml</bindingFiles>
+					<bindingDirectory>src/main/resources/jaxb</bindingDirectory>
+					<extension>true</extension>
+					<!-- 
+					<outputDirectory>src/main/java</outputDirectory>
+					<staleFile>${project.build.directory}/generated-sources/jaxb/presentation.staleFlag</staleFile>
+					<verbose>false</verbose>
+					 -->
                 </configuration>
             </plugin>
             <plugin>
@@ -129,10 +186,6 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
-            <plugin>
-            	<groupId>org.codehaus.mojo</groupId>
-            	<artifactId>exec-maven-plugin</artifactId>
             </plugin>
             <plugin>
             	<groupId>org.codehaus.mojo</groupId>

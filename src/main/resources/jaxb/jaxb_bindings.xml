@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings version="1.0"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+              jxb:extensionBindingPrefixes="xjc">
+  <jxb:bindings>
+     <jxb:globalBindings>
+         <xjc:serializable uid="1"/>
+         <jxb:javaType name="java.util.Date" xmlType="xs:date" 
+                     parseMethod="com.cginfo.test.simplespring.util.XmlDateTimeCustomBinder.parseDateTime"
+                    printMethod="com.cginfo.test.simplespring.util.XmlDateTimeCustomBinder.printDateTime" />
+     </jxb:globalBindings>
+  </jxb:bindings>
+</jxb:bindings>
